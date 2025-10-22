@@ -5,6 +5,12 @@ VisualStudioVersion = 17.14.36616.10 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingWebMVC", "BookingWebMVC\BookingWebMVC.csproj", "{AE66A525-3032-4C86-8591-3034DA7146CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Domain", "Booking.Domain\Booking.Domain.csproj", "{4F4E3EF0-3FBA-4BFE-842C-CEE084A8B9EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Application", "Booking.Application\Booking.Application.csproj", "{410860A2-E2C9-41DF-90DA-2D784F6DDBC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Infrastructure", "Booking.Infrastructure\Booking.Infrastructure.csproj", "{6513D3E9-D2C6-41C6-8B65-7459B3C159C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{AE66A525-3032-4C86-8591-3034DA7146CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE66A525-3032-4C86-8591-3034DA7146CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE66A525-3032-4C86-8591-3034DA7146CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F4E3EF0-3FBA-4BFE-842C-CEE084A8B9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4E3EF0-3FBA-4BFE-842C-CEE084A8B9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4E3EF0-3FBA-4BFE-842C-CEE084A8B9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4E3EF0-3FBA-4BFE-842C-CEE084A8B9EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{410860A2-E2C9-41DF-90DA-2D784F6DDBC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{410860A2-E2C9-41DF-90DA-2D784F6DDBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{410860A2-E2C9-41DF-90DA-2D784F6DDBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{410860A2-E2C9-41DF-90DA-2D784F6DDBC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6513D3E9-D2C6-41C6-8B65-7459B3C159C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6513D3E9-D2C6-41C6-8B65-7459B3C159C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6513D3E9-D2C6-41C6-8B65-7459B3C159C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6513D3E9-D2C6-41C6-8B65-7459B3C159C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
