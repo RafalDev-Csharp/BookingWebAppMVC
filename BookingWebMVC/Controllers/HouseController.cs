@@ -42,6 +42,7 @@ namespace BookingWebMVC.Controllers
             {
                 await _dbContext.Houses.AddAsync(house);
                 await _dbContext.SaveChangesAsync();
+                TempData["success"] = "The house has been created successfully.";
             }
             catch (Exception ex)
             {
@@ -82,6 +83,7 @@ namespace BookingWebMVC.Controllers
             {
                 _dbContext.Houses.Update(house);
                 await _dbContext.SaveChangesAsync();
+                TempData["success"] = "The house has been updated successfully.";
                 return RedirectToAction("Index", "House");
             }
             catch (Exception ex)
@@ -110,11 +112,13 @@ namespace BookingWebMVC.Controllers
             var houseToDelete = await _dbContext.Houses.FirstOrDefaultAsync(h => h.Id == house.Id);
             if (houseToDelete is null)
             {
+                TempData["error"] = "The house could not be deleted";
                 return RedirectToAction("Error", "Home");
             }
 
             _dbContext.Houses.Remove(houseToDelete);
             await _dbContext.SaveChangesAsync();
+            TempData["success"] = "The house has been removed successfully.";
 
             return RedirectToAction("Index", "House");
         }
