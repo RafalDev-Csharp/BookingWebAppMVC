@@ -17,5 +17,10 @@ namespace BookingWebMVC.Controllers
             var output = _dbContext.Houses.ToList<House>();
             return View(output);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
