@@ -16,6 +16,7 @@ namespace Booking.Infrastructure.Data
         }
 
         public DbSet<House> Houses { get; set; }
+        public DbSet<HouseNumber> HouseNumbers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +53,55 @@ namespace Booking.Infrastructure.Data
                     Price = 150,
                     SqMeters = 750
                 });
+
+            //HouseNumber
+            modelBuilder.Entity<HouseNumber>().HasData(
+                new HouseNumber
+                {
+                    House_Number = 101,
+                    HouseId = 1,
+                },
+                new HouseNumber
+                {
+                    House_Number = 102,
+                    HouseId = 1,
+                },
+                new HouseNumber
+                {
+                    House_Number = 103,
+                    HouseId = 1,
+                },
+                new HouseNumber
+                {
+                    House_Number = 104,
+                    HouseId = 1,
+                },
+                new HouseNumber
+                {
+                    House_Number = 201,
+                    HouseId = 2,
+                },
+                new HouseNumber
+                {
+                    House_Number = 202,
+                    HouseId = 2,
+                },
+                new HouseNumber
+                {
+                    House_Number = 203,
+                    HouseId = 2,
+                },
+                new HouseNumber
+                {
+                    House_Number = 301,
+                    HouseId = 3,
+                },
+                new HouseNumber
+                {
+                    House_Number = 302,
+                    HouseId = 3,
+                }
+                );
         }
     }
 }
