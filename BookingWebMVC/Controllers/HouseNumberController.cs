@@ -1,6 +1,7 @@
 ﻿using Booking.Domain.Entities;
 using Booking.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingWebMVC.Controllers
@@ -19,14 +20,26 @@ namespace BookingWebMVC.Controllers
             return View(output);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            IEnumerable<SelectListItem> list = _dbContext.Houses.ToList().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            // ViewDate used to provide data from controller to the view
+            ViewData["HousesSelectListItems"] = list;
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] HouseNumber houseNumber)
         {
+
+            //this is a navigation property and it won't be validate 
+            //ModelState.Remove("House");
+            //or add to property House: [ValidateNever]
+
             if (houseNumber == null)
             {
                 ModelState.AddModelError(@"model", @"'HouseNumber' object cannot be null");
