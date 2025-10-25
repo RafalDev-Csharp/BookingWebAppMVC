@@ -5,46 +5,44 @@
     <div class="card-header bg-primary bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Create House Number</h2>
+                <h2 class="text-white py-2">Delete House Number</h2>
             </div>
         </div>
     </div>
     <div class="card-body border p-4">
         <form method="post" class="row" enctype="multipart/form-data">
+            @*  <input asp-for="@Model.HouseNumber" type="hidden" /> *@
+
+            <input asp-for="HouseNumber.House_Number" type="hidden" />
             <div asp-validation-summary="All"></div>
             <div class="p-3">
                 <div class="form-floating py-1 col-12">
-                    
                     <select asp-for="HouseNumber.HouseId" asp-items="Model.HousesList"
-                                                    class="form-select border shadow">
-                        <option disabled selected>--Select a House--</option>
+                            class="form-select border shadow" disabled>
                     </select>
                     <label asp-for="HouseNumber.HouseId" class="ms-2"></label>
-                    <span asp-validation-for="HouseNumber.HouseId" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-1 col-12">
-                    <input asp-for="HouseNumber.House_Number" class="form-control border shadow" />
+                    <input asp-for="HouseNumber.House_Number" disabled class="form-control border shadow" />
                     <label asp-for="HouseNumber.House_Number" class="ms-2"></label>
-                    <span asp-validation-for="HouseNumber.House_Number" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-1 col-12">
-                    <input asp-for="HouseNumber.SpecialDetails" class="form-control border shadow" />
+                    <input asp-for="HouseNumber.SpecialDetails" disabled class="form-control border shadow" />
                     <label asp-for="HouseNumber.SpecialDetails" class="ms-2"></label>
-                    <span asp-validation-for="HouseNumber.SpecialDetails" class="text-danger"></span>
                 </div>
-
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
-                        <button type="submit" class="btn btn-success w-100">
-                            <i class="bi bi-check-circle"></i> Create
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-check-circle"></i> Delete
                         </button>
                     </div>
                     <div class="col-6 col-md-3">
                         <a asp-controller="HouseNumber" asp-action="Index" class="btn btn-secondary w-100">
-                            <i class="bi bi-x-circle"></i> Cancel
+                            <i class="bi bi-trash-fill"></i> Cancel
                         </a>
                     </div>
                 </div>
+                @* </input> *@
             </div>
         </form>
     </div>
@@ -58,3 +56,5 @@
         <partial name="_ValidationScriptsPartial" />
     }
 }
+
+
