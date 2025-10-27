@@ -1,4 +1,7 @@
 ﻿using Booking.Application.Common.Interfaces;
+using Booking.Domain.Entities;
+using Booking.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +13,58 @@ namespace Booking.Infrastructure.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        
-        
+        private readonly ApplicationDbContext _dbContext;
+        internal DbSet<T> dbSet;
+        public Repository(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+            dbSet = _dbContext.Set<T>();
+        }
+
         public void Add(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Add(entity);
         }
 
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+            if (filter is not null)
+            {
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                //  House_Number,House,.. case sensitive
+                foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+            return query.FirstOrDefault();
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+            if (filter is not null)
+            {
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                //  House_Number,House,.. case sensitive
+                foreach (var property in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+            return query.ToList<T>();
         }
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Remove(entity);
         }
     }
 }

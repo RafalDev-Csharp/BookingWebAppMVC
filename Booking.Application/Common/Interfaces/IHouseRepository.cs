@@ -8,13 +8,9 @@ using System.Threading.Tasks;
 
 namespace Booking.Application.Common.Interfaces
 {
-    public interface IHouseRepository
+    public interface IHouseRepository : IRepository<House>
     {
-        IEnumerable<House> GetAll(Expression<Func<House, bool>>? filter = null, string? includeProperties = null);
-        House Get(Expression<Func<House, bool>> filter, string? includeProperties = null);
-        void Add(House house);
         void Update(House house);
-        void Remove(House house);
         Task Save();
     }
 }
