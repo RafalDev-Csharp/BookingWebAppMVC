@@ -45,7 +45,8 @@ namespace Booking.Infrastructure.Repository
 
         public IEnumerable<House> GetAll(Expression<Func<House, bool>>? filter = null, string? includeProperties = null)
         {
-                                    //_dbContext.Houses..       -- the same
+            //_dbContext.Houses..       -- the same
+            
             IQueryable<House> query = _dbContext.Set<House>();
             if (filter is not null)
             {
@@ -73,8 +74,8 @@ namespace Booking.Infrastructure.Repository
         }
 
         public void Update(House house)
-        {
-            _dbContext.Update<House>(house);
+        {            
+            _dbContext.Update(house);
         }
     }
 }

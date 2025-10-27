@@ -12,8 +12,9 @@ namespace Booking.Infrastructure.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+            //DbContextOptionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
         }
+
 
         public DbSet<House> Houses { get; set; }
         public DbSet<HouseNumber> HouseNumbers { get; set; }
