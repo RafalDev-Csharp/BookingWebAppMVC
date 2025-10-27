@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Booking.Domain.Entities
 {
-    public class House : IHouse
+    public class House
     {
         public int Id { get; set; }
 
