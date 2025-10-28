@@ -19,5 +19,10 @@ namespace Booking.Infrastructure.Repository
             _dbContext = dbContext;
             House = new HouseRepository(_dbContext);
         }
+
+        public async Task SaveAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

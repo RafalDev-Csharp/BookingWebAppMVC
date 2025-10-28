@@ -19,12 +19,6 @@ namespace Booking.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
-       
-
-        public async Task Save()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
 
         public void Update(House house)
         {            

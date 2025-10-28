@@ -9,15 +9,15 @@ namespace BookingWebMVC.Controllers
 {
     public class HouseController : Controller
     {
-        private readonly IHouseRepository _houseRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HouseController(IHouseRepository houseRepository)
+        public HouseController(IUnitOfWork unitOfWork)
         {
-            _houseRepository = houseRepository;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            var output = _houseRepository.GetAll();
+            var output = _unitOfWork.House.GetAll();
             return View(output);
         }
 
@@ -29,7 +29,7 @@ namespace BookingWebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]House house)
         {
-            var housesList = _houseRepository.GetAll().Where(x => string.Equals(x.Name.ToLower(), house.Name.ToLower()));
+            var housesList = _unitOfWork.House.GetAll().Where(x => string.Equals(x.Name.ToLower(), house.Name.ToLower()));
             if (housesList.Count() > 0)
             {
                 ModelState.AddModelError("Name", "Model with this name already exists.");
@@ -47,8 +47,8 @@ namespace BookingWebMVC.Controllers
             }
             try
             {
-                _houseRepository.Add(house);
-                await _houseRepository.Save();
+                _unitOfWork.House.Add(house);
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = "The house has been created successfully.";
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace BookingWebMVC.Controllers
         public async Task<IActionResult> Update(int houseId)
         {
             //var houseToUpdate = _dbContext.Houses.Find(houseId);
-            var houseToUpdate = _houseRepository.Get(x => x.Id ==  houseId);
+            var houseToUpdate = _unitOfWork.House.Get(x => x.Id ==  houseId);
             if (houseToUpdate is null)
             {
                 return RedirectToAction("Error", "Home");
@@ -82,8 +82,8 @@ namespace BookingWebMVC.Controllers
             }
             try
             {
-                _houseRepository.Update(house);
-                await _houseRepository.Save();
+                _unitOfWork.House.Update(house);
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = "The house has been updated successfully.";
                 return RedirectToAction("Index", "House");
             }
@@ -98,7 +98,7 @@ namespace BookingWebMVC.Controllers
         public async Task<IActionResult> Delete(int houseId)
         {
             //var houseToUpdate = _dbContext.Houses.Find(houseId);
-            var houseToDelete = _houseRepository.Get(h => h.Id == houseId);
+            var houseToDelete = _unitOfWork.House.Get(h => h.Id == houseId);
             if (houseToDelete is null)
             {
                 return RedirectToAction("Error", "Home");
@@ -110,15 +110,15 @@ namespace BookingWebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(House house)
         {
-            var houseToDelete = _houseRepository.Get(h => h.Id == house.Id);
+            var houseToDelete = _unitOfWork.House.Get(h => h.Id == house.Id);
             if (houseToDelete is null)
             {
                 TempData["error"] = "The house could not be deleted";
                 return RedirectToAction("Error", "Home");
             }
 
-            _houseRepository.Remove(houseToDelete);
-            await _houseRepository.Save();
+            _unitOfWork.House.Remove(houseToDelete);
+            await _unitOfWork.SaveAsync();
             TempData["success"] = "The house has been removed successfully.";
 
             return RedirectToAction("Index", "House");

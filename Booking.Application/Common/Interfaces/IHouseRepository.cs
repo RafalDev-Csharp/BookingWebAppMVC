@@ -11,6 +11,5 @@ namespace Booking.Application.Common.Interfaces
     public interface IHouseRepository : IRepository<House>
     {
         void Update(House house);
-        Task Save();
     }
 }

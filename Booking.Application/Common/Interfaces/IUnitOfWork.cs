@@ -9,5 +9,6 @@ namespace Booking.Application.Common.Interfaces
     public interface IUnitOfWork
     {
         IHouseRepository House { get; }
+        Task SaveAsync();
     }
 }
