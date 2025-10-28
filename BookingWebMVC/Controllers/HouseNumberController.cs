@@ -1,4 +1,5 @@
-﻿using Booking.Domain.Entities;
+﻿using Booking.Application.Common.Interfaces;
+using Booking.Domain.Entities;
 using Booking.Infrastructure.Data;
 using BookingWebMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,16 @@ namespace BookingWebMVC.Controllers
 {
     public class HouseNumberController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HouseNumberController(ApplicationDbContext dbContext)
+        public HouseNumberController(IUnitOfWork unitOfWork)
         {
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> Index()
         {
-            var output = await _dbContext.HouseNumbers.Include(x => x.House).ToListAsync();
+            //var output = await _unitOfWork.HouseNumbers.Include(x => x.House).ToListAsync();
+            var output = _unitOfWork.HouseNumber.GetAll(includeProperties: "House");
             return View(output);
         }
 
@@ -25,7 +27,7 @@ namespace BookingWebMVC.Controllers
         {
             HouseNumberVM houseNumberVM = new()
             {
-                HousesList = _dbContext.Houses.ToList().Select(x => new SelectListItem
+                HousesList = _unitOfWork.House.GetAll().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -43,13 +45,13 @@ namespace BookingWebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(HouseNumberVM houseNumberVM)
         {
-            bool isHouseNumberExists = _dbContext.HouseNumbers.Any(x => x.House_Number == houseNumberVM.HouseNumber.House_Number);
+            bool isHouseNumberExists = _unitOfWork.HouseNumber.Any(x => x.House_Number == houseNumberVM.HouseNumber.House_Number);
             if (isHouseNumberExists)
             {
                 TempData["error"] = "The House Number already exists, enter the another number";
                 houseNumberVM = new()
                 {
-                    HousesList = _dbContext.Houses.ToList().Select(x => new SelectListItem
+                    HousesList = _unitOfWork.House.GetAll().Select(x => new SelectListItem
                     {
                         Text = x.Name,
                         Value = x.Id.ToString()
@@ -71,8 +73,8 @@ namespace BookingWebMVC.Controllers
             }
             try
             {
-                await _dbContext.HouseNumbers.AddAsync(houseNumberVM.HouseNumber);
-                await _dbContext.SaveChangesAsync();
+                _unitOfWork.HouseNumber.Add(houseNumberVM.HouseNumber);
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = "The house has been created successfully.";
             }
             catch (Exception ex)
@@ -88,13 +90,13 @@ namespace BookingWebMVC.Controllers
         public async Task<IActionResult> Update(int houseNumberId)
         {
             HouseNumberVM houseNumberToUpdateVM = new();
-            houseNumberToUpdateVM.HousesList = _dbContext.Houses.ToList()
+            houseNumberToUpdateVM.HousesList = _unitOfWork.House.GetAll()
                 .Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 });
-            houseNumberToUpdateVM.HouseNumber = await _dbContext.HouseNumbers.Include(x => x.House).FirstOrDefaultAsync(h => h.House_Number == houseNumberId);
+            houseNumberToUpdateVM.HouseNumber = _unitOfWork.HouseNumber.Get(h => h.House_Number == houseNumberId);
             if (houseNumberToUpdateVM.HouseNumber is null)
             {
                 TempData["error"] = $"Something went wrong while reading the data of House Number with Id = {houseNumberId}";
@@ -107,7 +109,7 @@ namespace BookingWebMVC.Controllers
         public async Task<IActionResult> Update(HouseNumberVM? houseNumberToUpdateVM)
         {
             //var houseNumberExists = await _dbContext.HouseNumbers.Where(x => x.House_Number == houseNumberToUpdateVM.HouseNumber.House_Number).ToListAsync();
-            houseNumberToUpdateVM.HousesList = _dbContext.Houses.ToList()
+            houseNumberToUpdateVM.HousesList = _unitOfWork.House.GetAll()
                 .Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -128,8 +130,8 @@ namespace BookingWebMVC.Controllers
             }
             try
             {
-                _dbContext.HouseNumbers.Update(houseNumberToUpdateVM.HouseNumber);
-                await _dbContext.SaveChangesAsync();
+                _unitOfWork.HouseNumber.Update(houseNumberToUpdateVM.HouseNumber);
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = "The House Number has been updated successfully.";
                 return RedirectToAction("Index", "HouseNumber");
             }
@@ -144,13 +146,13 @@ namespace BookingWebMVC.Controllers
         public async Task<IActionResult> Delete(int houseNumberId)
         {
             HouseNumberVM houseNumberToDeleteVM = new();
-            houseNumberToDeleteVM.HousesList = _dbContext.Houses.ToList()
+            houseNumberToDeleteVM.HousesList = _unitOfWork.House.GetAll()
                 .Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 });
-            houseNumberToDeleteVM.HouseNumber = await _dbContext.HouseNumbers.Include(x => x.House).FirstOrDefaultAsync(h => h.House_Number == houseNumberId);
+            houseNumberToDeleteVM.HouseNumber = _unitOfWork.HouseNumber.Get(h => h.House_Number == houseNumberId);
             if (houseNumberToDeleteVM.HouseNumber is null)
             {
                 TempData["error"] = $"Something went wrong while reading the data of House Number with Id = {houseNumberId}";
@@ -162,21 +164,21 @@ namespace BookingWebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(HouseNumberVM? houseNumberToDeleteVM)
         {
-            houseNumberToDeleteVM.HousesList = _dbContext.Houses.ToList()
+            houseNumberToDeleteVM.HousesList = _unitOfWork.House.GetAll()
                 .Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 });
-            houseNumberToDeleteVM.HouseNumber = await _dbContext.HouseNumbers.FirstOrDefaultAsync(x => x.House_Number == houseNumberToDeleteVM.HouseNumber.House_Number);
+            houseNumberToDeleteVM.HouseNumber = _unitOfWork.HouseNumber.Get(h => h.House_Number == houseNumberToDeleteVM.HouseNumber.House_Number);
             if (houseNumberToDeleteVM.HouseNumber is null)
             {
                 TempData["error"] = "The house number could not be deleted";
                 return RedirectToAction("Error", "Home");
             }
 
-            _dbContext.HouseNumbers.Remove(houseNumberToDeleteVM.HouseNumber);
-            await _dbContext.SaveChangesAsync();
+            _unitOfWork.HouseNumber.Remove(houseNumberToDeleteVM.HouseNumber);
+            await _unitOfWork.SaveAsync();
             TempData["success"] = "The house has been removed successfully.";
 
             return RedirectToAction("Index", "HouseNumber");

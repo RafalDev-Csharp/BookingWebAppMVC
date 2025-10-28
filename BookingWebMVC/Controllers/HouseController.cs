@@ -27,7 +27,7 @@ namespace BookingWebMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm]House house)
+        public async Task<IActionResult> Create([FromForm] House house)
         {
             var housesList = _unitOfWork.House.GetAll().Where(x => string.Equals(x.Name.ToLower(), house.Name.ToLower()));
             if (housesList.Count() > 0)
@@ -40,7 +40,7 @@ namespace BookingWebMVC.Controllers
                 ModelState.AddModelError(@"model 'house' is null", @"'House' object cannot be null");
                 return View();
             }
-            if(ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
                 ModelState.AddModelError(@"model 'house' is not valid", @"'House' object is not valid, fill the form properly");
                 return View(house);
@@ -59,11 +59,11 @@ namespace BookingWebMVC.Controllers
             //return RedirectToAction(nameof(Index), new { house });
         }
 
-        
+
         public async Task<IActionResult> Update(int houseId)
         {
             //var houseToUpdate = _dbContext.Houses.Find(houseId);
-            var houseToUpdate = _unitOfWork.House.Get(x => x.Id ==  houseId);
+            var houseToUpdate = _unitOfWork.House.Get(x => x.Id == houseId);
             if (houseToUpdate is null)
             {
                 return RedirectToAction("Error", "Home");
@@ -75,6 +75,9 @@ namespace BookingWebMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(House house)
         {
+            //var housesList = _unitOfWork.House.GetAll().Where(x => string.Equals(x.Name.ToLower(), house.Name.ToLower()));
+            var housesList = _unitOfWork.House.Get((x => string.Equals(x.Name.ToLower(), house.Name.ToLower())));
+            if (housesList is not null) { }
             if (house == null)
             {
                 ModelState.AddModelError("Model", "This house not exists. Probably it was removed.");

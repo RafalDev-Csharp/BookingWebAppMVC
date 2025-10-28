@@ -13,11 +13,13 @@ namespace Booking.Infrastructure.Repository
         private readonly ApplicationDbContext _dbContext;
 
         public IHouseRepository House { get; private set; }
+        public IHouseNumberRepository HouseNumber { get; private set; }
 
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
             House = new HouseRepository(_dbContext);
+            HouseNumber = new HouseNumberRepository(_dbContext);
         }
 
         public async Task SaveAsync()
