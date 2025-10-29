@@ -10,10 +10,12 @@ namespace BookingWebMVC.Controllers
     public class HouseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HouseController(IUnitOfWork unitOfWork)
+        public HouseController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -47,6 +49,24 @@ namespace BookingWebMVC.Controllers
             }
             try
             {
+                if (ModelState.IsValid)
+                {
+                    if (house.Image is not null)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(house.Image.FileName);
+                        string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\houseImage");
+
+                        using var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                            house.Image.CopyTo(fileStream);
+
+                        house.ImageUrl = @"\images\houseImage\" + fileName;
+                    }
+                    else
+                    {
+                        house.ImageUrl = "https://placehold.co/600x400";
+                    }
+                }
+                
                 _unitOfWork.House.Add(house);
                 await _unitOfWork.SaveAsync();
                 TempData["success"] = "The house has been created successfully.";
@@ -68,14 +88,43 @@ namespace BookingWebMVC.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-
+            if (houseToUpdate.ImageUrl is null)
+            {
+                houseToUpdate.ImageUrl = "https://placehold.co/600x400";
+            }
             return View(houseToUpdate);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(House house)
         {
-            //var housesList = _unitOfWork.House.GetAll().Where(x => string.Equals(x.Name.ToLower(), house.Name.ToLower()));
+            if (ModelState.IsValid && house.Id > 0)
+            {
+                if (house.Image is not null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(house.Image.FileName);
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\houseImage");
+                   
+                    if (!string.IsNullOrEmpty(house.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, house.ImageUrl.Trim('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+                    using var fileStream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                    house.Image.CopyTo(fileStream);
+
+                    house.ImageUrl = @"\images\houseImage\" + fileName;
+                }
+                else
+                {
+                    house.ImageUrl = "https://placehold.co/600x400";
+                }
+            }
+
             var housesList = _unitOfWork.House.Get((x => string.Equals(x.Name.ToLower(), house.Name.ToLower())));
             if (housesList is not null) { }
             if (house == null)
@@ -106,6 +155,10 @@ namespace BookingWebMVC.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
+            if (houseToDelete.ImageUrl is null)
+            {
+                houseToDelete.ImageUrl = "https://placehold.co/600x400";
+            }
 
             return View(houseToDelete);
         }
@@ -120,6 +173,15 @@ namespace BookingWebMVC.Controllers
                 return RedirectToAction("Error", "Home");
             }
 
+            if (!string.IsNullOrEmpty(house.ImageUrl))
+            {
+                var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, house.ImageUrl.Trim('\\'));
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
             _unitOfWork.House.Remove(houseToDelete);
             await _unitOfWork.SaveAsync();
             TempData["success"] = "The house has been removed successfully.";

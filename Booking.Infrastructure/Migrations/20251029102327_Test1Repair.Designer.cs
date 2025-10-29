@@ -4,6 +4,7 @@ using Booking.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251029102327_Test1Repair")]
+    partial class Test1Repair
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,99 +24,6 @@ namespace Booking.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Booking.Domain.Entities.Amenity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HouseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HouseId");
-
-                    b.ToTable("Amenities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            HouseId = 1,
-                            Name = "Private Pool"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            HouseId = 1,
-                            Name = "Microwave"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            HouseId = 1,
-                            Name = "Private Balcony"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            HouseId = 1,
-                            Name = "1 king bed and 1 sofa bed"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            HouseId = 2,
-                            Name = "Private Plunge Pool"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            HouseId = 2,
-                            Name = "Microwave and Mini Refrigerator"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            HouseId = 2,
-                            Name = "Private Balcony"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            HouseId = 2,
-                            Name = "king bed or 2 double beds"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            HouseId = 3,
-                            Name = "Private Pool"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            HouseId = 3,
-                            Name = "Jacuzzi"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            HouseId = 3,
-                            Name = "Private Balcony"
-                        });
-                });
 
             modelBuilder.Entity("Booking.Domain.Entities.House", b =>
                 {
@@ -249,17 +159,6 @@ namespace Booking.Infrastructure.Migrations
                             House_Number = 302,
                             HouseId = 3
                         });
-                });
-
-            modelBuilder.Entity("Booking.Domain.Entities.Amenity", b =>
-                {
-                    b.HasOne("Booking.Domain.Entities.House", "House")
-                        .WithMany()
-                        .HasForeignKey("HouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("House");
                 });
 
             modelBuilder.Entity("Booking.Domain.Entities.HouseNumber", b =>

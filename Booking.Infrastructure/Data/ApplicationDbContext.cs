@@ -18,14 +18,15 @@ namespace Booking.Infrastructure.Data
 
         public DbSet<House> Houses { get; set; }
         public DbSet<HouseNumber> HouseNumbers { get; set; }
+        public DbSet<Amenity> Amenities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<House>().HasData(
                 new House
-                { 
+                {
                     Id = 1,
                     Name = "Big House",
                     Description = "Description about Big House...",
@@ -103,6 +104,68 @@ namespace Booking.Infrastructure.Data
                     HouseId = 3,
                 }
                 );
+
+            modelBuilder.Entity<Amenity>().HasData(
+         new Amenity
+         {
+             Id = 1,
+             HouseId = 1,
+             Name = "Private Pool"
+         }, new Amenity
+         {
+             Id = 2,
+             HouseId = 1,
+             Name = "Microwave"
+         }, new Amenity
+         {
+             Id = 3,
+             HouseId = 1,
+             Name = "Private Balcony"
+         }, new Amenity
+         {
+             Id = 4,
+             HouseId = 1,
+             Name = "1 king bed and 1 sofa bed"
+         },
+
+         new Amenity
+         {
+             Id = 5,
+             HouseId = 2,
+             Name = "Private Plunge Pool"
+         }, new Amenity
+         {
+             Id = 6,
+             HouseId = 2,
+             Name = "Microwave and Mini Refrigerator"
+         }, new Amenity
+         {
+             Id = 7,
+             HouseId = 2,
+             Name = "Private Balcony"
+         }, new Amenity
+         {
+             Id = 8,
+             HouseId = 2,
+             Name = "king bed or 2 double beds"
+         },
+
+         new Amenity
+         {
+             Id = 9,
+             HouseId = 3,
+             Name = "Private Pool"
+         }, new Amenity
+         {
+             Id = 10,
+             HouseId = 3,
+             Name = "Jacuzzi"
+         }, new Amenity
+         {
+             Id = 11,
+             HouseId = 3,
+             Name = "Private Balcony"
+         });
         }
     }
 }

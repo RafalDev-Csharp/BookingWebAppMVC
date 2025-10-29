@@ -10,6 +10,7 @@ namespace Booking.Application.Common.Interfaces
     {
         IHouseRepository House { get; }
         IHouseNumberRepository HouseNumber { get; }
+        IAmenityRepository Amenity { get; }
         Task SaveAsync();
     }
 }
